@@ -44,10 +44,17 @@ type AddCaseModalProps = {
   Make sure to replace the string that is currently
   in this variable 
 */
+
 const InsertCaseMutation = `
-query MyQuery {
-  __typename # Placeholder value
-}
+  mutation AddCategoryMutation($description: String = "Trial and error", $name: String = "", $status: String = "", $category_id: Int = 1) {
+    insert_cases(objects: {description: $description, name: $name, status: $status, category_id: $category_id}) {
+      returning {
+        id
+        category_id
+        description
+      }
+    }
+  }
 `;
 // END TODO
 
@@ -123,6 +130,11 @@ const AddCaseModal: React.FC<AddCaseModalProps> = (props) => {
                 setCategory(event.target.value as number);
               }}
             >
+              {data.category.map(categoryList => (
+                <MenuItem key={categoryList.id} value={categoryList.id}>
+                  {categoryList.name}
+                </MenuItem>
+              ))}
               {/*
                 FEATURE 2 TODO:
                 Use the data from the result of the query ManagementContainerQuery
