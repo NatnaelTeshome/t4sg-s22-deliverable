@@ -8,7 +8,7 @@ import CaseCategory from "./CaseCategory";
 import AddCaseModal from "./Modals/AddCaseModal";
 import { useQuery } from "urql";
 import AddCategoryModal from "./Modals/AddCategoryModal";
-import AddTagModal from "./Modals/AddTagModal";
+import DeleteCategoryModal from "./Modals/DeleteCategoryModal"
 
 /* 
   FEATURE 1 TODO:
@@ -42,8 +42,8 @@ const CaseManagementContainer: React.FC = (props) => {
     React.useState<boolean>(false);
   const [addCategoryModalOpen, setAddCategoryModalOpen] =
     React.useState<boolean>(false);
-  const [addTagModalOpen, setAddTagModalOpen] = React.useState<boolean>(false);
-
+  const [deleteCategoryModalOpen, setDeleteCategoryModalOpen] =
+    React.useState<boolean>(false);
   /* NOTE: This uses */
   const [{ data, fetching, error }, executeQuery] = useQuery({
     query: ManagementContainerQuery,
@@ -68,9 +68,9 @@ const CaseManagementContainer: React.FC = (props) => {
         open={addCategoryModalOpen}
       />
 
-      <AddTagModal
-        onClose={() => setAddTagModalOpen(false)}
-        open={addTagModalOpen}
+      <DeleteCategoryModal
+        onClose={() => setDeleteCategoryModalOpen(false)}
+        open={deleteCategoryModalOpen}
       />
 
       <Container
@@ -84,14 +84,12 @@ const CaseManagementContainer: React.FC = (props) => {
         <Button variant="dark" onClick={() => setAddCategoryModalOpen(true)}>
           Add Category
         </Button>
-        <Button variant="dark" onClick={() => setAddTagModalOpen(true)}>
-          Add Tag To A Case
-        </Button>
+
         <Button variant="dark" onClick={() => setAddCaseModalOpen(true)}>
           Add Case
         </Button>
-        <Button variant="dark" onClick={() => "redirect"}>
-          Delete Case
+        <Button variant="dark" onClick={() => setDeleteCategoryModalOpen(true)}>
+          Delete Category
         </Button>
         <Button variant="dark" onClick={() => "redirect"}>
           Edit Case

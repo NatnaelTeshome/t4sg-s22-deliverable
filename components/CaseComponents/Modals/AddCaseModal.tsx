@@ -46,7 +46,7 @@ type AddCaseModalProps = {
 */
 
 const InsertCaseMutation = `
-  mutation AddCategoryMutation($description: String = "Trial and error", $name: String = "", $status: String = "", $category_id: Int = 1) {
+  mutation AddCaseMutation($description: String = "", $name: String = "", $status: String = "", $category_id: Int = 1) {
     insert_cases(objects: {description: $description, name: $name, status: $status, category_id: $category_id}) {
       returning {
         id
@@ -135,13 +135,6 @@ const AddCaseModal: React.FC<AddCaseModalProps> = (props) => {
                   {categoryList.name}
                 </MenuItem>
               ))}
-              {/*
-                FEATURE 2 TODO:
-                Use the data from the result of the query ManagementContainerQuery
-                to render a MenuItem with category id as the value, and the 
-                category name as the text.
-              */}
-              {/* END TODO */}
             </Select>
           </FormControl>
         ) : fetching ? (
