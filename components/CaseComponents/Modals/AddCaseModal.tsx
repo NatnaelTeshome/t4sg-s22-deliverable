@@ -122,7 +122,7 @@ const AddCaseModal: React.FC<AddCaseModalProps> = (props) => {
                 setCategory(event.target.value as number);
               }}
             >
-              {data.category.map(categoryList => (
+              {data.category.map((categoryList:any) => (
                 <MenuItem key={categoryList.id} value={categoryList.id}>
                   {categoryList.name}
                 </MenuItem>

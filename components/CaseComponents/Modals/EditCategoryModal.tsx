@@ -75,7 +75,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = (props) => {
                 setCategory(event.target.value as number);
               }}
             >
-              {data.category.map(categoryList => (
+              {data.category.map((categoryList:any) => (
                 <MenuItem key={categoryList.id} value={categoryList.id} >
                   {categoryList.name}
                 </MenuItem>
@@ -88,7 +88,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = (props) => {
         <TextField
           id="standard-full-width"
           label="Name"
-          placeholder={(data && category) ? data.category.filter(categoryEdit => categoryEdit.id === category)[0].name : 'Edit Name'}
+          placeholder={(data && category) ? data.category.filter((categoryEdit:any) => categoryEdit.id === category)[0].name : 'Edit Name'}
           fullWidth
           margin="normal"
           value={name}
@@ -102,7 +102,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = (props) => {
         <TextField
           id="standard-full-width"
           label="Description"
-          placeholder={(data && category) ? data.category.filter(categoryEdit => categoryEdit.id === category)[0].description : 'Edit Description'}
+          placeholder={(data && category) ? data.category.filter((categoryEdit:any) => categoryEdit.id === category)[0].description : 'Edit Description'}
           fullWidth
           margin="normal"
           value={description}

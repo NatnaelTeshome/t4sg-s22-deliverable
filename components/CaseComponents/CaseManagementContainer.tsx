@@ -59,7 +59,7 @@ const CaseManagementContainer: React.FC = (props) => {
       Home Page
       </h1>
       <Grid container spacing={3}>
-        { data ? (data.category.map(caseCategory => <CaseCategory key={caseCategory.id} category_id={caseCategory.id } />)): fetching ? (
+        { data ? (data.category.map((caseCategory:any) => <CaseCategory key={caseCategory.id} category_id={caseCategory.id } />)): fetching ? (
           "Loading"
         ) : null}
       </Grid>
