@@ -9,28 +9,25 @@ import AddCaseModal from "./Modals/AddCaseModal";
 import { useQuery } from "urql";
 import AddCategoryModal from "./Modals/AddCategoryModal";
 import DeleteCategoryModal from "./Modals/DeleteCategoryModal"
-
-/* 
-  FEATURE 1 TODO:
-  Write a query that will get the name AND id of 
-  every category. Build this query, and verify it 
-  works in Hasura, and then paste the query here.
-
-  Make sure to replace the string that is currently
-  in this variable 
-*/
-
+import EditCategoryModal from "./Modals/EditCategoryModal"
+import { CenterFocusStrong } from "@material-ui/icons";
 
 export const ManagementContainerQuery = `
-query QueryCatergory {
-  category {
-    id
-    name
+  query QueryCatergory {
+    category {
+      id
+      name
+      description
+      cases {
+        description
+        id
+        name
+        status
+        category_id
+      }
+    }
   }
-}
-
 `;
-// END TODO
 
 export type ManagementCategory = {
   id: number;
@@ -44,6 +41,8 @@ const CaseManagementContainer: React.FC = (props) => {
     React.useState<boolean>(false);
   const [deleteCategoryModalOpen, setDeleteCategoryModalOpen] =
     React.useState<boolean>(false);
+  const [editCategoryModalOpen, setEditCategoryModalOpen] =
+    React.useState<boolean>(false);
   /* NOTE: This uses */
   const [{ data, fetching, error }, executeQuery] = useQuery({
     query: ManagementContainerQuery,
@@ -51,9 +50,16 @@ const CaseManagementContainer: React.FC = (props) => {
 
   return (
     <>
-      <h5 className="title">Home Page</h5>
+      <h1 className="title" style={{
+          color: "crimson",
+          fontWeight: "bold",
+          fontFamily: "fantasy",
+          marginBottom: "2rem",
+        }}>
+      Home Page
+      </h1>
       <Grid container spacing={3}>
-        { data ? (data.category.map(caseCategory => <CaseCategory category_id={caseCategory.id }/>)): fetching ? (
+        { data ? (data.category.map(caseCategory => <CaseCategory key={caseCategory.id} category_id={caseCategory.id } />)): fetching ? (
           "Loading"
         ) : null}
       </Grid>
@@ -73,26 +79,35 @@ const CaseManagementContainer: React.FC = (props) => {
         open={deleteCategoryModalOpen}
       />
 
+      <EditCategoryModal
+        onClose={() => setEditCategoryModalOpen(false)}
+        open={editCategoryModalOpen}
+      />
+
+
       <Container
         style={{
-          width: "100%",
           borderStyle: "solid",
           padding: "0.75rem",
-          marginTop: "0.75rem",
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "space-around",
+          width: "100%",
+          backgroundColor: "greenyellow"
         }}
       >
-        <Button variant="dark" onClick={() => setAddCategoryModalOpen(true)}>
+        <Button variant="secondary" onClick={() => setAddCategoryModalOpen(true)}>
           Add Category
         </Button>
 
-        <Button variant="dark" onClick={() => setAddCaseModalOpen(true)}>
+        <Button variant="secondary" onClick={() => setAddCaseModalOpen(true)}>
           Add Case
         </Button>
-        <Button variant="dark" onClick={() => setDeleteCategoryModalOpen(true)}>
+        <Button variant="secondary" onClick={() => setDeleteCategoryModalOpen(true)}>
           Delete Category
         </Button>
-        <Button variant="dark" onClick={() => "redirect"}>
-          Edit Case
+        <Button variant="secondary" onClick={() => setEditCategoryModalOpen(true)}>
+          Edit Category
         </Button>
       </Container>
     </>

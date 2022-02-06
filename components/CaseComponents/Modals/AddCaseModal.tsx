@@ -36,27 +36,19 @@ type AddCaseModalProps = {
   onClose: () => void;
 };
 
-/* 
-  FEATURE 2 TODO:
-  Write a mutation that will insert (add) a new case given the
-  description, name, status, and category_id.
-  
-  Make sure to replace the string that is currently
-  in this variable 
-*/
 
 const InsertCaseMutation = `
   mutation AddCaseMutation($description: String = "", $name: String = "", $status: String = "", $category_id: Int = 1) {
-    insert_cases(objects: {description: $description, name: $name, status: $status, category_id: $category_id}) {
-      returning {
-        id
-        category_id
-        description
-      }
+    insert_cases_one(object: {description: $description, name: $name, status: $status, category_id: $category_id}) {
+      id
+      category_id
+      description
+      name
+      status
     }
   }
 `;
-// END TODO
+
 
 const AddCaseModal: React.FC<AddCaseModalProps> = (props) => {
   const classes = useStyles();
@@ -151,6 +143,10 @@ const AddCaseModal: React.FC<AddCaseModalProps> = (props) => {
               status,
               category_id: category,
             });
+            setDescription("")
+            setName("")
+            setStatus("")
+            setCategory(null)
             props.onClose();
           }}
         >

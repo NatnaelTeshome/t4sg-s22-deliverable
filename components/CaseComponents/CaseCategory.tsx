@@ -43,7 +43,7 @@ const CaseCategory = (props: CaseCategoryProps) => {
 
   return (
     <Container
-      style={{ width: "100%", borderStyle: "solid", padding: "0.75rem" }}
+      style={{ width: "60%", height: "20%", borderStyle: "solid", padding: "0.75rem"}}
     >
       <Row>
         <Col>

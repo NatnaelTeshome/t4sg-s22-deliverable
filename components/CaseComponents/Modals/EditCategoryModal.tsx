@@ -31,37 +31,40 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type DeleteCategoryModalProps = {
+type EditCategoryModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-const DeleteCategoryMutation = `
-  mutation DeleteCategory ($id: bigint!) {
-    delete_category_by_pk(id: $id) {
+
+const EditCategoryMutation = `
+  mutation EditCategoryMutation ($id: bigint!, $description: String, $name: String) {
+    update_category_by_pk(pk_columns: {id: $id}, _set: {description: $description, name: $name}) {
       id
+      description
       name
     }
   }
 `;
 
-const DeleteCategoryModal: React.FC<DeleteCategoryModalProps> = (props) => {
+const EditCategoryModal: React.FC<EditCategoryModalProps> = (props) => {
   const classes = useStyles();
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<number | null>(null);
   const [{ data, fetching, error }, executeQuery] = useQuery({
     query: ManagementContainerQuery,
   });
 
-  const [result, executeMutation] = useMutation(DeleteCategoryMutation);
-
+  const [result, executeMutation] = useMutation(EditCategoryMutation);
 
   return (
     <StyledModal open={props.open} onClose={props.onClose}>
       <Typography variant="h4" align="center">
-        Delete Category
+        Edit Category
       </Typography>
       <Box>
-        {data ? (
+      {data ? (
           <FormControl fullWidth>
             <InputLabel id="category-select-label">Category</InputLabel>
             <Select
@@ -73,7 +76,7 @@ const DeleteCategoryModal: React.FC<DeleteCategoryModalProps> = (props) => {
               }}
             >
               {data.category.map(categoryList => (
-                <MenuItem key={categoryList.id} value={categoryList.id}>
+                <MenuItem key={categoryList.id} value={categoryList.id} >
                   {categoryList.name}
                 </MenuItem>
               ))}
@@ -82,22 +85,54 @@ const DeleteCategoryModal: React.FC<DeleteCategoryModalProps> = (props) => {
         ) : fetching ? (
           "Loading Categories"
         ) : null}
+        <TextField
+          id="standard-full-width"
+          label="Name"
+          placeholder={(data && category) ? data.category.filter(categoryEdit => categoryEdit.id === category)[0].name : 'Edit Name'}
+          fullWidth
+          margin="normal"
+          value={name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setName(event.target.value);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          id="standard-full-width"
+          label="Description"
+          placeholder={(data && category) ? data.category.filter(categoryEdit => categoryEdit.id === category)[0].description : 'Edit Description'}
+          fullWidth
+          margin="normal"
+          value={description}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setDescription(event.target.value);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
       </Box>
       <Box mt="10px" display="flex" justifyContent="center">
         <Button
           variant="outlined"
           onClick={() => {
             executeMutation({
-              id: category
+              id: category,
+              description,
+              name,
             });
+            setDescription("")
+            setName("")
             setCategory(null)
             props.onClose();
           }}
         >
-          Delete
+          Submit
         </Button>
       </Box>
     </StyledModal>
   );
 };
-export default DeleteCategoryModal;
+export default EditCategoryModal;
